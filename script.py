@@ -75,7 +75,9 @@ class GDrive:
         ans = self.GetFolderIDbyTittle(folderName, fileList)
         if ans==None:
             ans = self.createRemoteFolder(folderName, parentID)
+            self.SendToUpload = True
             print("Created folder in drive with name " + folderName )
+        self.SendToUpload = False
         return ans
 
        
@@ -86,11 +88,8 @@ class GDrive:
         if(self.YearFolderID==None):
             self.YearFolderID  = self.SearchFolderNameByID(keyYear,self.LightBillMainID)
         if(self.MonthFOlderID==None):
-            self.SendToUpload = True
             self.MonthFOlderID=  self.SearchFolderNameByID(KeyMonth,self.YearFolderID)
-        else: 
-            self.SendToUpload = False
-
+        
 
 class MahaDiscom:
     def __init__(self):
