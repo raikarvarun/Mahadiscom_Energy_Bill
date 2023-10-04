@@ -13,7 +13,6 @@ class GDrive:
         self.LightBillMainID = None
         self.YearFolderID = None
         self.MonthFOlderID = None
-        self.SendToUpload = False
 
     # Create a folder on Drive, returns the newely created folders ID
     def createRemoteFolder(self , folderName, parentID ):
@@ -43,17 +42,22 @@ class GDrive:
     # Upload All files in that folder
     def uploadFile(self ):
         path = "Output"   
+        fileList = self.GetAllFiles(self.MonthFOlderID)
         for fileName in os.listdir(path):
-            body = {
-                'title': fileName,
-                'parents': [{'id': self.MonthFOlderID}], 
-            }
-            file1 = self.DriveService.CreateFile(body)
-            file1.SetContentFile(os.path.join(path, fileName))
-            file1.Upload()
-            #print('title: %s, id: %s' % (file1['title'], file1['id']))
-            print(fileName + " Uploaded")
-            file1 = None
+            ans = self.GetFolderIDbyTittle(fileName, fileList)
+            if(ans==None):
+                body = {
+                    'title': fileName,
+                    'parents': [{'id': self.MonthFOlderID}], 
+                }
+                file1 = self.DriveService.CreateFile(body)
+                file1.SetContentFile(os.path.join(path, fileName))
+                file1.Upload()
+                #print('title: %s, id: %s' % (file1['title'], file1['id']))
+                print(fileName + " Uploaded")
+                file1 = None
+            else:
+                print(fileName + " Exists")
 
 
     # Get All list of files and folder by folder ID in drive
@@ -75,9 +79,7 @@ class GDrive:
         ans = self.GetFolderIDbyTittle(folderName, fileList)
         if ans==None:
             ans = self.createRemoteFolder(folderName, parentID)
-            self.SendToUpload = True
             print("Created folder in drive with name " + folderName )
-        self.SendToUpload = False
         return ans
 
        
@@ -89,7 +91,9 @@ class GDrive:
             self.YearFolderID  = self.SearchFolderNameByID(keyYear,self.LightBillMainID)
         if(self.MonthFOlderID==None):
             self.MonthFOlderID=  self.SearchFolderNameByID(KeyMonth,self.YearFolderID)
-        
+         
+            
+
 
 class MahaDiscom:
     def __init__(self):
@@ -234,7 +238,7 @@ class MahaDiscom:
     # it is very fast
     # font is not accurate  
     def SaveHtmlAsPdf(self):
-        config = pdfkit.configuration(wkhtmltopdf = r"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")  
+        config = pdfkit.configuration(wkhtmltopdf = r"wkhtmltopdf\\bin\\wkhtmltopdf.exe")  
         options = {
             'page-size': 'A4',
                 
@@ -288,10 +292,8 @@ def main():
     bYear = billMonth[-4:]
 
     Mydrive.SetUploadFolderID(bYear,bMonth)
-    if(Mydrive.SendToUpload):
-        Mydrive.uploadFile()
-    else:
-        print("folder already exist")
+    Mydrive.uploadFile()
+    
         
     
 
