@@ -1,11 +1,11 @@
 # Mahadiscom_API
-Python script to download mahadiscom light bill and upload to google drive
+Python script to download mahadiscom light bill ( mahavitaran api ) and upload to google drive.
 
 
 
 # Requirements
 
-1> Convert Html to Pdf by wkhtmltopdf and pdfkit (this is fast but not font accurate print)
+1> Convert Html to Pdf by wkhtmltopdf and pdfkit (this is fast algorithm but not accurate print)
 
     1. Install wkhtmltopdf
     Go to the wkhtmltopdf official downloads page, 
@@ -15,7 +15,7 @@ Python script to download mahadiscom light bill and upload to google drive
     2. Install pdfkit
     pip install pdfkit
 
-2> Convert Html to Pdf by pyhtml2pdf (this is slow but accurate print)
+2> Convert Html to Pdf by pyhtml2pdf (this is slow algorithm but accurate print)
 
     1. Install pyhtml2pdf
     pip install pyhtml2pdf
