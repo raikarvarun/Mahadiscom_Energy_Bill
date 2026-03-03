@@ -1,3 +1,7 @@
+from pydrive.drive import GoogleDrive
+from pydrive.auth import GoogleAuth
+import os
+
 class GDrive:
     def __init__(self):
         self.DriveService = None
@@ -31,10 +35,9 @@ class GDrive:
         self.DriveService = GoogleDrive(gauth)
 
     # Upload All files in that folder
-    def uploadFile(self ):
-        path = "Output"   
+    def uploadFile(self , pathOut ):   
         fileList = self.GetAllFiles(self.MonthFOlderID)
-        for fileName in os.listdir(path):
+        for fileName in os.listdir(pathOut):
             ans = self.GetFolderIDbyTittle(fileName, fileList)
             if(ans==None):
                 body = {
@@ -42,7 +45,7 @@ class GDrive:
                     'parents': [{'id': self.MonthFOlderID}], 
                 }
                 file1 = self.DriveService.CreateFile(body)
-                file1.SetContentFile(os.path.join(path, fileName))
+                file1.SetContentFile(os.path.join(pathOut, fileName))
                 file1.Upload()
                 #print('title: %s, id: %s' % (file1['title'], file1['id']))
                 print(fileName + " Uploaded")
@@ -75,9 +78,9 @@ class GDrive:
 
        
     # Get Folder ID by
-    def SetUploadFolderID(self , keyYear, KeyMonth):
+    def SetUploadFolderID(self ,mainFolderName,  keyYear, KeyMonth):
         if(self.LightBillMainID==None):
-            self.LightBillMainID = self.SearchFolderNameByID("LightBills","root")
+            self.LightBillMainID = self.SearchFolderNameByID(mainFolderName,"root")
         if(self.YearFolderID==None):
             self.YearFolderID  = self.SearchFolderNameByID(keyYear,self.LightBillMainID)
         if(self.MonthFOlderID==None):

@@ -28,10 +28,10 @@ class MahaDiscom:
         f.close()
     
     # Remove all files in output
-    def removeAllFiles(self):
-        files = os.listdir("Output/")
+    def removeAllFiles(self, dirName):
+        files = os.listdir(dirName)
         for file in files:
-            file_path = os.path.join("Output/", file)
+            file_path = os.path.join(dirName, file)
             if os.path.isfile(file_path):
                 os.remove(file_path)
         print("All files deleted successfully.")
@@ -42,7 +42,7 @@ class MahaDiscom:
         print(self.LightBillsNos)
 
      # Get Bill Data 
-    def NewGetBillData(self,ConsumerNo, BillName , BillMonth, RequestSession):
+    def NewGetBillData(self,ConsumerNo,  BillName , BillMonth , language, outDirName, RequestSession):
         
         self.ConsumerNo = ConsumerNo
         self.BillName = BillName
@@ -55,7 +55,7 @@ class MahaDiscom:
         view_details = {
             'hdnConsumerNumber': self.BillCrypto.encrypt(ConsumerNo),
             'hdnBillMonth' : self.BillCrypto.encrypt(BillMonth), 
-            'hdnLanguage' : "1", 
+            'hdnLanguage' : str(language), 
             'hdnBILLING_TARIFF_CODE' : "090" , 
             'hdnBu': self.BillCrypto.encrypt(buNumber),
             'ddlLanguage' : "2", 
@@ -83,7 +83,7 @@ class MahaDiscom:
                 file.write(str(soup))
                 
             driver = webdriver.Chrome()
-            self.SaveHtmlAsPdf(driver)
+            self.SaveHtmlAsPdf(driver, outDirName)
             driver.quit()
             return
 
@@ -94,14 +94,14 @@ class MahaDiscom:
     
     
     #new version
-    def SaveHtmlAsPdf(self, driver):
+    def SaveHtmlAsPdf(self, driver ,outDirName):
         # ---- Bill month formatting ----
         billMonth = self.BillMonth
         billMonth = self.BillName + "_" + billMonth[:-5].upper() + "_" + billMonth[-4:]
         # JAN 2026 -> JAN_2026
 
         # ---- Output setup ----
-        output_dir = "Output"
+        output_dir = outDirName
         os.makedirs(output_dir, exist_ok=True)
 
         fileName = os.path.join(output_dir, f"{billMonth}.pdf")
