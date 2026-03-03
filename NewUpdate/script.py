@@ -21,18 +21,18 @@ def main():
 
     for i in range(0, len(mahadiscom.LightBillsNos)  ):
         with requests.Session() as SingleSession:
-            mahadiscom.RefreshCaptcha(mahadiscom.LightBillsNos[i] , mahadiscom.LightBillsNames[i] , SingleSession )
+            mahadiscom.NewGetBillData(mahadiscom.LightBillsNos[i] , mahadiscom.LightBillsNames[i] , "Feb 2026", SingleSession )
         
-    print("Drive Processing")
-    Mydrive = GDrive()
-    Mydrive.createCredintails()
+    # print("Drive Processing")
+    # Mydrive = GDrive()
+    # Mydrive.createCredintails()
 
-    billMonth = mahadiscom.BillDetails["billMonth"]
-    bMonth = billMonth[:-5].upper()
-    bYear = billMonth[-4:]
+    # billMonth = mahadiscom.BillDetails["billMonth"]
+    # bMonth = billMonth[:-5].upper()
+    # bYear = billMonth[-4:]
 
-    Mydrive.SetUploadFolderID(bYear,bMonth)
-    Mydrive.uploadFile()
+    # Mydrive.SetUploadFolderID(bYear,bMonth)
+    # Mydrive.uploadFile()
     
         
     

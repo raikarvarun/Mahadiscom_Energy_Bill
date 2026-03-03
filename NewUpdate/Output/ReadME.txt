@@ -1,1 +1,0 @@
-Your all downloaded light bills store in this folder.
